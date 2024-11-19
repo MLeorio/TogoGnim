@@ -6,9 +6,9 @@ import { Coord, CoordSchema } from './schemas/coord.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Coord.name, schema: CoordSchema }])
+    MongooseModule.forFeature([{ name: Coord.name, schema: CoordSchema }]),
   ],
   controllers: [CoordController],
   providers: [CoordsService],
 })
-export class CoordsModule { }
+export class CoordsModule {}

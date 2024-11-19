@@ -15,7 +15,7 @@ import { CoordsModule } from './coords/coords.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
-      isGlobal: true
+      isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DB_URI),
     AuthModule,
@@ -29,4 +29,4 @@ import { CoordsModule } from './coords/coords.module';
     CoordsModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

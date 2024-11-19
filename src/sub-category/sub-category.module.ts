@@ -6,9 +6,11 @@ import { SubCategory, SubCategorySchema } from './schema/sub-category.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: SubCategory.name, schema: SubCategorySchema }])
+    MongooseModule.forFeature([
+      { name: SubCategory.name, schema: SubCategorySchema },
+    ]),
   ],
   controllers: [SubCategoryController],
   providers: [SubCategoryService],
 })
-export class SubCategoryModule { }
+export class SubCategoryModule {}

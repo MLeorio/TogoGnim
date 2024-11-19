@@ -6,7 +6,7 @@ import { Annexe, AnnexeSchema } from './schemas/annexe.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{name: Annexe.name, schema: AnnexeSchema}])
+    MongooseModule.forFeature([{ name: Annexe.name, schema: AnnexeSchema }]),
   ],
   controllers: [AnnexeController],
   providers: [AnnexeService],

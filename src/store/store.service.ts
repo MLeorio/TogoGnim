@@ -8,12 +8,11 @@ import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class StoreService {
-
   constructor(
     @InjectModel(Store.name)
     private storeModel: mongoose.Model<Store>,
-    private readonly categoryService: CategoryService
-  ) { }
+    private readonly categoryService: CategoryService,
+  ) {}
 
   async create(createStoreDto: CreateStoreDto, user: string): Promise<Store> {
     const store = new this.storeModel(createStoreDto);
@@ -31,7 +30,10 @@ export class StoreService {
   }
 
   async update(id: string, updateStoreDto: UpdateStoreDto): Promise<Store> {
-    return await this.storeModel.findByIdAndUpdate(id, updateStoreDto, {new: true}).populate('category').exec();
+    return await this.storeModel
+      .findByIdAndUpdate(id, updateStoreDto, { new: true })
+      .populate('category')
+      .exec();
   }
 
   async remove(id: string): Promise<Store> {

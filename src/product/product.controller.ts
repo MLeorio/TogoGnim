@@ -1,23 +1,39 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, HttpStatus, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Product } from './schema/product.schema';
 
 @ApiTags('Produits')
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
-
+  constructor(private readonly productService: ProductService) {}
 
   // @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'Created Succesfully',
     type: CreateProductDto,
-    isArray: false
+    isArray: false,
   })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @Post()
@@ -26,8 +42,8 @@ export class ProductController {
     return {
       status: HttpStatus.CREATED,
       data: product,
-      message: "Produit ajouté avec succès !"
-    }
+      message: 'Produit ajouté avec succès !',
+    };
   }
 
   // @UseGuards(JwtAuthGuard)
@@ -42,10 +58,9 @@ export class ProductController {
     return {
       status: HttpStatus.OK,
       data: products,
-      message: "La liste de tous les produits."
-    }
+      message: 'La liste de tous les produits.',
+    };
   }
-
 
   @ApiNotFoundResponse({
     description: 'Not Found',
@@ -61,31 +76,33 @@ export class ProductController {
       return {
         status: HttpStatus.OK,
         data: product,
-        message: `Le produit ${product.product_name} récupéré avec succès`
-      }
+        message: `Le produit ${product.product_name} récupéré avec succès`,
+      };
     } catch (e) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: e.message
-      }
+        message: e.message,
+      };
     }
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
     try {
       const product = await this.productService.update(id, updateProductDto);
       return {
         status: HttpStatus.OK,
         data: product,
-        message: `Le produit ${product.product_name} a été mise à jour`
-      }
+        message: `Le produit ${product.product_name} a été mise à jour`,
+      };
     } catch (e) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: e.message
-      }
+        message: e.message,
+      };
     }
   }
 
@@ -96,13 +113,13 @@ export class ProductController {
       return {
         status: HttpStatus.ACCEPTED,
         data: product,
-        message: `Le produit ${product.product_name} a été retiré avec succès !`
-      }
+        message: `Le produit ${product.product_name} a été retiré avec succès !`,
+      };
     } catch (e) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: e.message
-      }
+        message: e.message,
+      };
     }
   }
 }

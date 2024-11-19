@@ -1,16 +1,31 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpStatus, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  HttpStatus,
+  Put,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiTags } from '@nestjs/swagger';
-
+import {
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiHeader,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Catégorie')
 @Controller('category')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) { }
+  constructor(private readonly categoryService: CategoryService) {}
 
-  @ApiCreatedResponse({ description: "L'enrégistrement a été éffectué avec succès." })
+  @ApiCreatedResponse({
+    description: "L'enrégistrement a été éffectué avec succès.",
+  })
   @ApiForbiddenResponse({ description: 'Action Interdite.' })
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
@@ -18,8 +33,8 @@ export class CategoryController {
     return {
       status: HttpStatus.CREATED,
       data: category,
-      message: "Catégorie ajoutée avec succès !"
-    }
+      message: 'Catégorie ajoutée avec succès !',
+    };
   }
 
   @Get()
@@ -28,8 +43,8 @@ export class CategoryController {
     return {
       status: HttpStatus.OK,
       data: categories,
-      message: "La liste de toutes les Catégories."
-    }
+      message: 'La liste de toutes les Catégories.',
+    };
   }
 
   @Get(':id')
@@ -39,39 +54,40 @@ export class CategoryController {
     return {
       status: HttpStatus.OK,
       data: category,
-      message: `La catégorie avec l'id ${id} récupéré avec succès`
-    }
+      message: `La catégorie avec l'id ${id} récupéré avec succès`,
+    };
   }
 
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto
+    @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
     try {
-      const category = await this.categoryService.updateCategory(id, updateCategoryDto);
+      const category = await this.categoryService.updateCategory(
+        id,
+        updateCategoryDto,
+      );
       return {
         status: HttpStatus.OK,
         data: category,
-        message: "Mise à jour des infos de catégorie réussie !"
-      }
+        message: 'Mise à jour des infos de catégorie réussie !',
+      };
     } catch (e) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         data: null,
-        message: e.errmsg
-      }
+        message: e.errmsg,
+      };
     }
   }
-
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.categoryService.remove(id);
     return {
       status: HttpStatus.OK,
-      message: "Catégorie supprimée avec succès !"
-    }
+      message: 'Catégorie supprimée avec succès !',
+    };
   }
-
 }

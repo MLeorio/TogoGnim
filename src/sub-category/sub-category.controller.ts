@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SubCategoryService } from './sub-category.service';
 import { CreateSubCategoryDto } from './dto/create-sub-category.dto';
 import { UpdateSubCategoryDto } from './dto/update-sub-category.dto';
 import { ApiTags } from '@nestjs/swagger';
-
 
 @ApiTags('Sous Catégorie')
 @Controller('sub-category')
@@ -26,7 +33,10 @@ export class SubCategoryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubCategoryDto: UpdateSubCategoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateSubCategoryDto: UpdateSubCategoryDto,
+  ) {
     return this.subCategoryService.updateSubCategory(id, updateSubCategoryDto);
   }
 
