@@ -20,11 +20,11 @@ export class Store {
   @Prop()
   store_website: string;
 
-  @Prop()
-  store_is_Ecom: string;
+  @Prop({ default: true })
+  store_is_Ecom: boolean;
 
-  @Prop({ default: false })
-  store_is_certified: string;
+  @Prop({ default: true })
+  store_is_certified: boolean;
 
   @Prop()
   store_rate: number;

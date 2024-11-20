@@ -11,7 +11,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Hall Consommer Local | TogoGnim API')
     .setDescription("Documentation de l'API TOGOGNIM")
-    .setVersion('1.0')
+    .setVersion('1.9')
     .addBearerAuth()
     .build();
 

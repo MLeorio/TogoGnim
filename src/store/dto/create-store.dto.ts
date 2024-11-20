@@ -51,7 +51,7 @@ export class CreateStoreDto {
     default: false,
   })
   @IsString()
-  store_is_Ecom: string;
+  store_is_Ecom: boolean;
 
   @ApiProperty({
     type: Boolean,
