@@ -4,19 +4,29 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MailerService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService
+  ) { }
+
   private async transporter() {
     const transporter = nodemailer.createTransport({
-      host: '127.0.0.1',
-      port: 1025,
-      ignoreTLS: true,
+      host: this.configService.get<string>('MAIL_HOST'),
+      port: this.configService.get<number>('MAIL_PORT'),
       secure: false,
+      auth: {
+        user: this.configService.get<string>('MAIL_USER'),
+        pass: this.configService.get<string>('MAIL_PASS'),
+      }
     });
     return transporter;
   }
   async sendSignupConfirmation(userEmail: string, url: string) {
-    (await this.transporter()).sendMail({
-      from: this.configService.get('APP_MAIL'),
+    const transport = await this.transporter();
+    const options: nodemailer.SendMailOptions = {
+      from: {
+        name: this.configService.get<string>('APP_NAME'),
+        address: this.configService.get<string>("APP_MAIL")
+      },
       to: userEmail,
       subject: 'Inscription Réussie',
       html: `
@@ -24,12 +34,22 @@ export class MailerService {
                 <p>Bienvenue sur notre plateforme...</p>
                 <p>Voici le lien pour <a href="${url}">activer votre compte</a></p>
             `,
-    });
+    }
+
+    try {
+      await transport.sendMail(options);
+      console.log("Mail envoyé");
+    } catch (error) {
+      console.log("erreur lors de l'envoi de mail", error)
+    }
   }
 
   async sendResetPassword(userEmail: string, url: string, code: string) {
     (await this.transporter()).sendMail({
-      from: this.configService.get('APP_MAIL'),
+      from: {
+        name: this.configService.get<string>('APP_NAME'),
+        address: this.configService.get<string>("APP_MAIL")
+      },
       to: userEmail,
       subject: 'Réinitialisation de mot de passe ',
       html: `
@@ -44,7 +64,10 @@ export class MailerService {
 
   async sendResetPasswordConfirm(email: string) {
     (await this.transporter()).sendMail({
-      from: this.configService.get('APP_MAIL'),
+      from: {
+        name: this.configService.get<string>('APP_NAME'),
+        address: this.configService.get<string>("APP_MAIL")
+      },
       to: email,
       subject: 'Confirmation de réinitialisation de votre mot de passe',
       html: `
