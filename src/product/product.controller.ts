@@ -8,6 +8,8 @@ import {
   Put,
   HttpStatus,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -22,14 +24,16 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Product } from './schema/product.schema';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @ApiTags('Produits')
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'Created Succesfully',
     type: CreateProductDto,
@@ -37,8 +41,19 @@ export class ProductController {
   })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @Post()
-  async create(@Body() createProductDto: CreateProductDto) {
-    const product = await this.productService.create(createProductDto);
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: './file',
+      filename: (req, file, cb) => {
+        const fileName = `${req.body.product_name.replace(/\s+/g, '_')}_${Date.now()}`;
+        const extension = file.originalname.split('.').pop();
+        cb(null, `${fileName}.${extension}`);
+      },
+    }),
+  }))
+  async create(@Body() createProductDto: CreateProductDto, @UploadedFile() image: Express.Multer.File) {
+    const imagePath = image ? image.path : null;
+    const product = await this.productService.create(createProductDto, imagePath);
     return {
       status: HttpStatus.CREATED,
       data: product,
@@ -46,12 +61,12 @@ export class ProductController {
     };
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({
     type: [Product],
     isArray: true,
   })
-  // @ApiBearerAuth()
+  @ApiBearerAuth()
   @Get()
   async findAll() {
     const products = await this.productService.findAll();
@@ -113,7 +128,7 @@ export class ProductController {
       return {
         status: HttpStatus.ACCEPTED,
         data: product,
-        message: `Le produit ${product.product_name} a été retiré avec succès !`,
+        message: `Le produit ${product.product_name} a été retiré avec succès!`,
       };
     } catch (e) {
       return {

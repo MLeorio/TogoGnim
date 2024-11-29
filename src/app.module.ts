@@ -10,6 +10,7 @@ import { ProductModule } from './product/product.module';
 import { SubCategoryModule } from './sub-category/sub-category.module';
 import { AnnexeModule } from './annexe/annexe.module';
 import { CoordsModule } from './coords/coords.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CoordsModule } from './coords/coords.module';
     SubCategoryModule,
     AnnexeModule,
     CoordsModule,
+    ImageModule,
   ],
 })
 export class AppModule {}

@@ -66,7 +66,7 @@ export class UserController {
     try {
       const user = await this.userService.createUser(userDTO);
       return {
-        status: HttpStatus.OK,
+        status: HttpStatus.CREATED,
         data: user,
         message: 'Compte utilisateur crée avec succès !',
       };

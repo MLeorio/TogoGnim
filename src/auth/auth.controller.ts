@@ -22,7 +22,7 @@ export class AuthController {
   async register(@Body() userDto: RegisterDto) {
     const user = await this.authService.signup(userDto);
     return {
-      status: HttpStatus.ACCEPTED,
+      status: HttpStatus.CREATED,
       message: "L'utilisateur a été créé avec succès",
       data: user,
     };

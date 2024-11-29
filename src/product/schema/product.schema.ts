@@ -19,6 +19,10 @@ export class Product {
 
   @Prop({ type: Types.ObjectId, ref: 'Store', required: true })
   store: Types.ObjectId;
+  
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Image' }] })
+  images: Types.ObjectId[];
+
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
